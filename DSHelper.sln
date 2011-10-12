@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSHelper.Data", "DSHelper.Data\DSHelper.Data.csproj", "{2BDC7A1A-1766-476B-AC73-932A7D0F4203}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSHelper.Data", "source\DSHelper.Data\DSHelper.Data.csproj", "{2BDC7A1A-1766-476B-AC73-932A7D0F4203}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSHelper.Sample", "DSHelper.Sample\DSHelper.Sample.csproj", "{ED460FB1-FCBE-4FFB-B837-83CFC2965ACA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSHelper.Sample", "source\DSHelper.Sample\DSHelper.Sample.csproj", "{ED460FB1-FCBE-4FFB-B837-83CFC2965ACA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSHelper.Tests", "DSHelper.Tests\DSHelper.Tests.csproj", "{F507AC62-7582-4ED1-9FBC-158BB9007070}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSHelper.Tests", "source\DSHelper.Tests\DSHelper.Tests.csproj", "{F507AC62-7582-4ED1-9FBC-158BB9007070}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7854A72E-0FF5-4645-8773-1491405C088E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,5 +52,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F507AC62-7582-4ED1-9FBC-158BB9007070} = {7854A72E-0FF5-4645-8773-1491405C088E}
 	EndGlobalSection
 EndGlobal
