@@ -3,15 +3,15 @@ using DSHelper.Data;
 
 namespace DSHelper.Sample.Data
 {
-    public interface IOrderRepository : IRepository<DataSetOrder.OrderRow>
+    public interface IOrderRepository : IRepository<DataSetAdventureWorks.SalesOrderHeaderRow>
     {
-        DataSetOrder.OrderDataTable Orders { get; }
-        DataSetOrder.OrderLineDataTable OrderLines { get; }
+        DataSetAdventureWorks.SalesOrderHeaderDataTable Orders { get; }
+        DataSetAdventureWorks.SalesOrderDetailDataTable OrderLines { get; }
 
-        IEnumerable<DataSetOrder.OrderRow> Find(IOrderFilter filter);
-        IEnumerable<DataSetOrder.OrderLineRow> GetOrderLines(int orderId);
+        IEnumerable<DataSetAdventureWorks.SalesOrderHeaderRow> Find(IOrderFilter filter);
+        IEnumerable<DataSetAdventureWorks.SalesOrderDetailRow> GetOrderLines(int orderId);
 
-        void Save(DataSetOrder.OrderLineRow orderLine);
-        void Delete(DataSetOrder.OrderLineRow orderLine);
+        void Save(DataSetAdventureWorks.SalesOrderDetailRow orderLine);
+        void Delete(DataSetAdventureWorks.SalesOrderDetailRow orderLine);
     }
 }

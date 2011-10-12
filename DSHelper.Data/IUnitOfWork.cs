@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace DSHelper.Data
 {
     public interface IUnitOfWork : IDisposable
     {
-        SqlConnection Connection { get; }
+        DbConnection Connection { get; }
         
         void Commit();
         void Rollback();

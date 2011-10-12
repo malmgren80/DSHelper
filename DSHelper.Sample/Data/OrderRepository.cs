@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using DSHelper.Data;
@@ -10,32 +11,32 @@ namespace DSHelper.Sample.Data
 {
     public class OrderRepository : RepositoryBase, IOrderRepository
     {
-        private const string SelectOrderCommandText = "SELECT OrderId, CustomerId, Status, CreatedAt FROM [ORDER]";
-        private const string SelectOrderLineCommandText = "SELECT OrderLineId, OrderId, Article FROM [ORDERLINE]";
+        private const string SelectOrderCommandText = "SELECT [RevisionNumber], [OrderDate], [DueDate], [ShipDate], [Status], [OnlineOrderFlag], [PurchaseOrderNumber], [AccountNumber], [CustomerID], [ShipToAddressID], [BillToAddressID], [ShipMethod], [CreditCardApprovalCode], [SubTotal], [TaxAmt], [Freight], [Comment], [rowguid], [ModifiedDate] FROM [SalesOrderHeader]";
+        private const string SelectOrderLineCommandText = "SELECT [SalesOrderID], [OrderQty], [ProductID], [UnitPrice], [UnitPriceDiscount], [rowguid], [ModifiedDate] FROM [SalesOrderDetail]";
 
-        private DataSetOrder _dsOrder;
+        private DataSetAdventureWorks _dsOrder;
 
         #region public Properties
 
-        public DataSetOrder.OrderDataTable Orders
+        public DataSetAdventureWorks.SalesOrderHeaderDataTable Orders
         {
             get
             {
                 if (_dsOrder == null)
-                    _dsOrder = new DataSetOrder();
+                    _dsOrder = new DataSetAdventureWorks();
 
-                return _dsOrder.Order;
+                return _dsOrder.SalesOrderHeader;
             }
         }
 
-        public DataSetOrder.OrderLineDataTable OrderLines
+        public DataSetAdventureWorks.SalesOrderDetailDataTable OrderLines
         {
             get
             {
                 if (_dsOrder == null)
-                    _dsOrder = new DataSetOrder();
+                    _dsOrder = new DataSetAdventureWorks();
 
-                return _dsOrder.OrderLine;
+                return _dsOrder.SalesOrderDetail;
             }
         }
 
@@ -43,16 +44,16 @@ namespace DSHelper.Sample.Data
 
         #region Order methods
 
-        public DataSetOrder.OrderRow Get(int id)
+        public DataSetAdventureWorks.SalesOrderHeaderRow Get(int id)
         {
             IOrderFilter filter = new OrderFilter { OrderId = id, };
             Find(filter);
             return Orders.FirstOrDefault();
         }
 
-        public IEnumerable<DataSetOrder.OrderRow> Find(IOrderFilter filter)
+        public IEnumerable<DataSetAdventureWorks.SalesOrderHeaderRow> Find(IOrderFilter filter)
         {
-            using (var adapter = new SqlDataAdapter(SelectOrderCommandText, Connection))
+            using (var adapter = new SqlDataAdapter(SelectOrderCommandText, Connection as SqlConnection))
             {
                 adapter.SelectCommand.CommandText = filter.BuildWhereClause(SelectOrderCommandText);
                 Orders.Clear();
@@ -62,17 +63,17 @@ namespace DSHelper.Sample.Data
             return Orders;
         }
 
-        public IEnumerable<DataSetOrder.OrderRow> List()
+        public IEnumerable<DataSetAdventureWorks.SalesOrderHeaderRow> List()
         {
             return Find(OrderFilter.Empty);
         }
 
-        public void Save(DataSetOrder.OrderRow order)
+        public void Save(DataSetAdventureWorks.SalesOrderHeaderRow order)
         {
-            Orders.AddOrderRow(order);
+            Orders.AddSalesOrderHeaderRow(order);
         }
 
-        public void Delete(DataSetOrder.OrderRow order)
+        public void Delete(DataSetAdventureWorks.SalesOrderHeaderRow order)
         {
             order.Delete();
         }
@@ -81,12 +82,11 @@ namespace DSHelper.Sample.Data
 
         #region OrderLine methods
 
-        public IEnumerable<DataSetOrder.OrderLineRow> GetOrderLines(int orderId)
+        public IEnumerable<DataSetAdventureWorks.SalesOrderDetailRow> GetOrderLines(int orderId)
         {
             var builder = new ConditionsBuilder();
             builder.Add(string.Format("OrderId = {0}", orderId));
-
-            using (var adapter = new SqlDataAdapter(SelectOrderLineCommandText, Connection))
+            using (var adapter = new SqlDataAdapter(SelectOrderLineCommandText, Connection as SqlConnection))
             {
                 adapter.SelectCommand.CommandText = string.Format("{0} {1}", SelectOrderLineCommandText, builder.Build());
                 OrderLines.Clear();
@@ -96,12 +96,12 @@ namespace DSHelper.Sample.Data
             return OrderLines;
         }
 
-        public void Save(DataSetOrder.OrderLineRow orderLine)
+        public void Save(DataSetAdventureWorks.SalesOrderDetailRow orderLine)
         {
-            OrderLines.AddOrderLineRow(orderLine);
+            OrderLines.AddSalesOrderDetailRow(orderLine);
         }
 
-        public void Delete(DataSetOrder.OrderLineRow orderLine)
+        public void Delete(DataSetAdventureWorks.SalesOrderDetailRow orderLine)
         {
             orderLine.Delete();
         }
@@ -114,7 +114,7 @@ namespace DSHelper.Sample.Data
         {
             if (_dsOrder != null && Orders.Count(r => r.IsDirty()) > 0)
             {
-                using (var adapter = new SqlDataAdapter(SelectOrderCommandText, UnitOfWorkFactory.Current.Connection))
+                using (var adapter = new SqlDataAdapter(SelectOrderCommandText, UnitOfWorkFactory.Current.Connection as SqlConnection))
                 using (var builder = new SqlCommandBuilder(adapter))
                 {
                     adapter.Update(Orders);
@@ -123,7 +123,7 @@ namespace DSHelper.Sample.Data
 
             if (_dsOrder != null && OrderLines.Count(r => r.IsDirty()) > 0)
             {
-                using (var adapter = new SqlDataAdapter(SelectOrderLineCommandText, UnitOfWorkFactory.Current.Connection))
+                using (var adapter = new SqlDataAdapter(SelectOrderLineCommandText, UnitOfWorkFactory.Current.Connection as SqlConnection))
                 using (var builder = new SqlCommandBuilder(adapter))
                 {
                     adapter.Update(OrderLines);

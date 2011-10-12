@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Transactions;
 
@@ -7,27 +8,37 @@ namespace DSHelper.Data
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private SqlConnection _connection;
         private readonly TransactionScope _transaction;
         private bool _disposed;
+        private DbConnection _connection;
 
         public UnitOfWork()
         {
             _transaction = new TransactionScope();
         }
 
-        public SqlConnection Connection
+        public DbConnection Connection
         {
-            get
-            {
-                if (_connection == null)
-                {
-                    string connectionString = ConfigurationManager.ConnectionStrings[0].ConnectionString;
-                    _connection = new SqlConnection(connectionString);
-                }
+            get { return _connection ?? (_connection = CreateConnection()); }
+        }
 
-                return _connection;
+        // TODO: Move to ConnectionManager...
+        private static DbConnection CreateConnection()
+        {
+            var connectionStringSettings = ConfigurationManager.ConnectionStrings[0];
+            var factoryClasses = DbProviderFactories.GetFactory(connectionStringSettings.ProviderName);
+            var connection = factoryClasses.CreateConnection();
+
+            if (connection == null)
+            {
+                throw new NullReferenceException(
+                    "It's wasn't possible to create the connection for connection string.");
             }
+
+            connection.ConnectionString = connectionStringSettings.ConnectionString;
+            connection.Open();
+
+            return connection;
         }
 
         public void Commit()
