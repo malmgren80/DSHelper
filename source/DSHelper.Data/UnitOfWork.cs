@@ -25,7 +25,7 @@ namespace DSHelper.Data
         // TODO: Move to ConnectionManager...
         private static DbConnection CreateConnection()
         {
-            var connectionStringSettings = ConfigurationManager.ConnectionStrings[0];
+            var connectionStringSettings = ConfigurationManager.ConnectionStrings[1];
             var factoryClasses = DbProviderFactories.GetFactory(connectionStringSettings.ProviderName);
             var connection = factoryClasses.CreateConnection();
 

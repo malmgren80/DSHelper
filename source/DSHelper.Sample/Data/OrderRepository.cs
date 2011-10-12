@@ -11,8 +11,8 @@ namespace DSHelper.Sample.Data
 {
     public class OrderRepository : RepositoryBase, IOrderRepository
     {
-        private const string SelectOrderCommandText = "SELECT [RevisionNumber], [OrderDate], [DueDate], [ShipDate], [Status], [OnlineOrderFlag], [PurchaseOrderNumber], [AccountNumber], [CustomerID], [ShipToAddressID], [BillToAddressID], [ShipMethod], [CreditCardApprovalCode], [SubTotal], [TaxAmt], [Freight], [Comment], [rowguid], [ModifiedDate] FROM [SalesOrderHeader]";
-        private const string SelectOrderLineCommandText = "SELECT [SalesOrderID], [OrderQty], [ProductID], [UnitPrice], [UnitPriceDiscount], [rowguid], [ModifiedDate] FROM [SalesOrderDetail]";
+        private const string SelectOrderCommandText = "SELECT * FROM SalesOrderHeader";
+        private const string SelectOrderLineCommandText = "SELECT * FROM SalesOrderDetail";
 
         private DataSetAdventureWorks _dsOrder;
 

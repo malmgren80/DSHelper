@@ -26,8 +26,8 @@ namespace DSHelper.Sample.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLEXPRESS;AttachDbFilename=|DataDirectory|\\AdventureWorksLT2008_Da" +
-            "ta.mdf;Integrated Security=True;User Instance=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SQLEXPRESS;AttachDbFilename=AdventureWorksLT2008_Data.mdf;Integrate" +
+            "d Security=True;User Instance=True")]
         public string AdventureWorksLT2008_DataConnectionString {
             get {
                 return ((string)(this["AdventureWorksLT2008_DataConnectionString"]));
